@@ -13,50 +13,41 @@
     <div id="root"></div>
     <script type="text/babel">
 
-      // ReactDOM.render(
-      //   <h1>Hello, world!</h1>,
-      //   document.getElementById('root')
-      // );
+	class Clock extends React.Component {
+	constructor(props) {
+	super(props);
+	this.state = {
+	cx: "50",
+	cy: "75",
+	r: "40",
+	stroke: "red",
+	fill: "blue"
+	};
+	}
 
-class Clock extends React.Component {
-  constructor(props) {
-    var milliseconds = (new Date).getTime();
-    super(props);
-    this.state = {date: milliseconds};
-  }
+	render() {
+	return (
 
-  componentDidMount() {
-    this.timerID = setInterval(
-      () => this.tick(),
-      1
-    );
-  }
+	<div>
+	    <svg>
+		<circle cx={this.state.cx}
+			cy={this.state.cy}
+			r={this.state.r}
+			stroke={this.state.stroke}
+			stroke-width="3"
+			fill={this.state.fill} />
+	    </svg>
+		     </div>
+	     );
+	 }
+     }
 
-  componentWillUnmount() {
-    clearInterval(this.timerID);
-  }
+     ReactDOM.render(
+	 <Clock />,
+	 document.getElementById('root')
+     );
 
-  tick() {
-    var milliseconds = (new Date).getTime();
-    this.setState({
-      date: milliseconds
-    });
-  }
 
-  render() {
-    return (
-      <div>
-        <h1>Hello, world!</h1>
-        <h2>It is {this.state.date}.</h2>
-      </div>
-    );
-  }
-}
-
-ReactDOM.render(
-  <Clock />,
-  document.getElementById('root')
-);
     </script>
     <!--
       Note: this page is a great way to try React but it's not suitable for production.

@@ -34,10 +34,11 @@ class Circle extends React.Component {
     }
 
     componentDidMount() {
+        ReactDOM.findDOMNode(this.refs.playArea).focus();
         setInterval(() => {
             this.setState({
-                cx: (this.state.cx + this.state.x_delta) % window.innerWidth,
-                cy: (this.state.cy + this.state.y_delta) % window.innerHeight
+                cx: Math.abs((this.state.cx + this.state.x_delta) % window.innerWidth),
+                cy: Math.abs((this.state.cy + this.state.y_delta) % window.innerHeight)
             });
         }, 5);
     }
@@ -73,7 +74,7 @@ class Circle extends React.Component {
 
     render() {
         return (
-            <div tabIndex="1" onKeyDown={this.changeThing}>
+            <div tabIndex="1" onKeyDown={this.changeThing} ref="playArea">
                 <style />
                 <svg>
                     <circle

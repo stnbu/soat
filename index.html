@@ -19,50 +19,76 @@
 	<div id="root"></div>
 	<script type="text/babel">
 
-	 class Circle extends React.Component {
-	     constructor(props) {
-		 super(props);
+class Circle extends React.Component {
+    constructor(props) {
+        super(props);
+        this.changeThing = this.changeThing.bind(this);
+        this.state = {
+            cx: window.innerWidth / 2,
+            cy: window.innerHeight / 2,
+            r: 15,
+            fill: "blue",
+            x_delta: 0,
+            y_delta: 0
+        };
+    }
 
-		 this.state = {
-		     cx: 0,
-		     cy: 75,
-		     r: 15,
-		     fill: "blue"
-		 };
-	     }
+    componentDidMount() {
+        setInterval(() => {
+            this.setState({
+                cx: (this.state.cx + this.state.x_delta) % window.innerWidth,
+                cy: (this.state.cy + this.state.y_delta) % window.innerHeight
+            });
+        }, 5);
+    }
 
+    changeThing(e) {
+        var x_delta;
+        var y_delta;
+        switch (e.keyCode) {
+            case 38: // up
+                x_delta = 0;
+                y_delta = -1;
+                break;
+            case 40: // down
+                x_delta = 0;
+                y_delta = 1;
+                break;
+            case 37: // left
+                x_delta = -1;
+                y_delta = 0;
+                break;
+            case 39: // right
+                x_delta = 1;
+                y_delta = 0;
+                break;
+            default: {
+            }
+        }
+        this.setState({
+            x_delta: x_delta,
+            y_delta: y_delta
+        });
+    }
 
+    render() {
+        return (
+            <div tabIndex="1" onKeyDown={this.changeThing}>
+                <style />
+                <svg>
+                    <circle
+                        cx={this.state.cx}
+                        cy={this.state.cy}
+                        r={this.state.r}
+                        fill={this.state.fill}
+                    />
+                </svg>
+            </div>
+        );
+    }
+}
 
-	     componentDidMount() {
-		 setInterval(() => {
-		     this.setState({
-			 cx: (this.state.cx + 1) % window.innerWidth,
-			 cy: (this.state.cy + 2) % window.innerHeight,
-		     });
-		 }, 5);
-	     }
-
-	     render() {
-		 return (
-		     <div>
-                     <style>
-
-                      </style>
-		      <svg>
-			  <circle cx={this.state.cx}
-				  cy={this.state.cy}
-				  r={this.state.r}
-				  fill={this.state.fill} />
-		      </svg>
-	</div>
-		      );
-		      }
-		      }
-
-		      ReactDOM.render(
-			  <Circle />,
-			  document.getElementById('root')
-		      );
+ReactDOM.render(<Circle />, document.getElementById("root"));
 
 
 	</script>

@@ -13,31 +13,36 @@
     <div id="root"></div>
     <script type="text/babel">
 
-	class Clock extends React.Component {
-	constructor(props) {
-	super(props);
-	this.state = {
-	cx: "50",
-	cy: "75",
-	r: "40",
-	stroke: "red",
-	fill: "blue"
-	};
-	}
+     class Clock extends React.Component {
+	 constructor(props) {
+	     super(props);
+	     this.state = {
+		 cx: 50,
+		 cy: "75",
+		 r: "40",
+		 stroke: "red",
+		 fill: "blue"
+	     };
+	 }
 
-	render() {
-	return (
+	 componentDidMount() {
+	     setInterval(() => {
+		 this.setState({ cx: (this.state.cx + 1) % 100 });
+	     }, 25);
+	 }
 
-	<div>
-	    <svg>
-		<circle cx={this.state.cx}
-			cy={this.state.cy}
-			r={this.state.r}
-			stroke={this.state.stroke}
-			stroke-width="3"
-			fill={this.state.fill} />
-	    </svg>
-		     </div>
+	 render() {
+	     return (
+		 <div>
+		     <svg>
+			 <circle cx={this.state.cx}
+			 cy={this.state.cy}
+			 r={this.state.r}
+			 stroke={this.state.stroke}
+			 stroke-width="3"
+			 fill={this.state.fill} />
+		     </svg>
+		 </div>
 	     );
 	 }
      }

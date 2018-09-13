@@ -19,6 +19,20 @@
 	<div id="root"></div>
 	<script type="text/babel">
 
+
+function Segment() {
+}
+
+function Snake(position) {
+    this.position = position;
+    this.body = new Array();
+
+    var i;
+    for (i = 0; i <= 5; i++) {
+        this.body.push(new Segment());
+    }
+}
+
 class Circle extends React.Component {
     constructor(props) {
         super(props);
@@ -36,9 +50,15 @@ class Circle extends React.Component {
     componentDidMount() {
         ReactDOM.findDOMNode(this.refs.playArea).focus();
         setInterval(() => {
+            var new_x = (this.state.cx + this.state.x_delta) % window.innerWidth;
+            var new_y = (this.state.cy + this.state.y_delta) % window.innerHeight;
+
+            if (new_x <= 0) { new_x = window.innerWidth; }
+            if (new_y <= 0) { new_y = window.innerHeight; }
+
             this.setState({
-                cx: Math.abs((this.state.cx + this.state.x_delta) % window.innerWidth),
-                cy: Math.abs((this.state.cy + this.state.y_delta) % window.innerHeight)
+                cx: new_x,
+                cy: new_y
             });
         }, 5);
     }

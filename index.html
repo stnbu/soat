@@ -1,71 +1,83 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Hello World</title>
-    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <head>
+	<meta charset="UTF-8" />
+	<title>Hello World</title>
+	<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+	<style>
 
-    <!-- Don't use this in production: -->
-    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="text/babel">
+	 html, body { margin:0; padding:0; overflow:hidden }
+	 svg { position:fixed; top:0; left:0; height:100%; width:100% }
 
-     class Clock extends React.Component {
-	 constructor(props) {
-	     super(props);
-	     this.state = {
-		 cx: 50,
-		 cy: "75",
-		 r: "40",
-		 stroke: "red",
-		 fill: "blue"
-	     };
-	 }
+	</style>
 
-	 componentDidMount() {
-	     setInterval(() => {
-		 this.setState({ cx: (this.state.cx + 1) % 100 });
-	     }, 25);
-	 }
+	<!-- Don't use this in production: -->
+	<script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    </head>
+    <body>
+	<div id="root"></div>
+	<script type="text/babel">
 
-	 render() {
-	     return (
-		 <div>
-		     <svg>
-			 <circle cx={this.state.cx}
-			 cy={this.state.cy}
-			 r={this.state.r}
-			 stroke={this.state.stroke}
-			 stroke-width="3"
-			 fill={this.state.fill} />
-		     </svg>
-		 </div>
-	     );
-	 }
-     }
+	 class Circle extends React.Component {
+	     constructor(props) {
+		 super(props);
 
-     ReactDOM.render(
-	 <Clock />,
-	 document.getElementById('root')
-     );
+		 this.state = {
+		     cx: 0,
+		     cy: 75,
+		     r: 15,
+		     fill: "blue"
+		 };
+	     }
 
 
-    </script>
-    <!--
-      Note: this page is a great way to try React but it's not suitable for production.
-      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
 
-      Read this section for a production-ready setup with JSX:
-      http://reactjs.org/docs/add-react-to-a-website.html#add-jsx-to-a-project
+	     componentDidMount() {
+		 setInterval(() => {
+		     this.setState({
+			 cx: (this.state.cx + 1) % window.innerWidth,
+			 cy: (this.state.cy + 2) % window.innerHeight,
+		     });
+		 }, 5);
+	     }
 
-      In a larger project, you can use an integrated toolchain that includes JSX instead:
-      http://reactjs.org/docs/create-a-new-react-app.html
+	     render() {
+		 return (
+		     <div>
+                     <style>
 
-      You can also use React without JSX, in which case you can remove Babel:
-      https://reactjs.org/docs/react-without-jsx.html
-    -->
-  </body>
+                      </style>
+		      <svg>
+			  <circle cx={this.state.cx}
+				  cy={this.state.cy}
+				  r={this.state.r}
+				  fill={this.state.fill} />
+		      </svg>
+	</div>
+		      );
+		      }
+		      }
+
+		      ReactDOM.render(
+			  <Circle />,
+			  document.getElementById('root')
+		      );
+
+
+	</script>
+	<!--
+	     Note: this page is a great way to try React but it's not suitable for production.
+	     It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+	     Read this section for a production-ready setup with JSX:
+	     http://reactjs.org/docs/add-react-to-a-website.html#add-jsx-to-a-project
+
+	     In a larger project, you can use an integrated toolchain that includes JSX instead:
+	     http://reactjs.org/docs/create-a-new-react-app.html
+
+	     You can also use React without JSX, in which case you can remove Babel:
+	     https://reactjs.org/docs/react-without-jsx.html
+	-->
+    </body>
 </html>

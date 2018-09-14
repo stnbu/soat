@@ -2,7 +2,7 @@
 <html>
     <head>
 	<meta charset="UTF-8" />
-	<title>Hello World</title>
+	<title>The Angry Little Worm</title>
 	<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
 	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
 	<style>
@@ -40,19 +40,19 @@ function wrap(value, wrap) {
     return new_value;
 }
 
-const Circle = ({ position }) => (
+const Circle = ({ position, index }) => (
     <circle
       cx={position[0] * config.segment_size}
       cy={position[1] * config.segment_size}
       r={config.circle_radius}
-      fill="green"
+      fill={(index == 0) ? 'red' :'green'}
     />
 );
 
 const SVG = ({ circles }) => (
     <svg>
       {
-          circles.map((position, i) => <Circle key={i} position={position} />)
+          circles.map((position, i) => <Circle key={i} position={position} index={i}/>)
       }
     </svg>
 );

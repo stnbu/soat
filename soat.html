@@ -45,7 +45,7 @@ class Snake extends React.Component {
         this.changeThing = this.changeThing.bind(this);
         this.state = {
             direction: [0, 1],
-            body: [[20, 0], [25, 0], [20, 0], [20, 0], [20, 0]],
+            body: [[20, 0], [20, 0], [20, 0], [20, 0], [20, 0]],
             len: 5
         };
     }
@@ -53,24 +53,21 @@ class Snake extends React.Component {
     componentDidMount() {
         ReactDOM.findDOMNode(this.refs.playArea).focus();
         setInterval(() => {
-
-            var new_body = [];
-            var x, y;
-            [x, y] = this.state.body[0].slice();
-            x += this.state.direction[0];
-            y += this.state.direction[1];
-
-            new_body.push([x, y]);
-
-            var i;
-            var a, b;
-            for (i = 1; i < this.state.len; i++) {
-                [a, b] = this.state.body[i-1].slice();
-                new_body.push([a, b]);
-            }
-
-            this.setState({
-                body: new_body
+            this.setState(function(state, props) {
+                var new_body = [];
+                var dx, dy, i;
+                dx = state.direction[0];
+                dy = state.direction[1];
+                new_body.push([
+                    state.body[0][0] + dx,
+                    state.body[0][1] + dy,
+                ]);
+                for (i = 1; i < this.state.len; i++) {
+                    new_body.push(state.body[i-1]);
+                }
+                return {
+                    body: new_body
+                };
             });
 
         }, 300);
@@ -93,8 +90,8 @@ class Snake extends React.Component {
             case 39: // right
                 direction = [1, 0];
                 break;
-            default: {
-            }
+            default:
+                return;
         }
         this.setState({
             direction: direction,

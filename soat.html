@@ -63,38 +63,72 @@ const Snake = ({ circles }) => (
     </g>
 );
 
+function Player(keys, color, startx) {
+    this.keys = keys;  /* [u, d, l, r] */
+    this.color = color;
+}
 
 class Arena extends React.Component {
     constructor(props) {
         super(props);
         this.changeThing = this.changeThing.bind(this);
+        this.getNewBody = this.getNewBody.bind(this);
+        this.players = [
+            new Player([87, 90, 65, 83], 'red'),
+            new Player([38, 40, 37, 39], 'blue')
+        ];
+
+        /*
+         * a simple structure to represent our players' state:
+         * the first element is "direction": [0,1] for down, [1,0] for right...etc
+         * the subsequent elements are body segment coordinates
+         */
+        var p0 = [[20, 20]].repeat(20);
+        var p1 = [[50, 20]].repeat(20);
+        p0.unshift([0, 0]);
+        p1.unshift([0, 0]);
         this.state = {
-            direction: [0, 0],
-            body: [[10, 10]].repeat(20),
-            len: 20
+            player_states: [
+                p0,
+                p1
+            ]
         };
+    }
+
+    getNewBody(player_state) {
+        var direction = player_state[0];
+        var body = player_state.slice(1);
+        var new_body = [];
+        var dx, dy, i;
+        dx = direction[0];
+        dy = direction[1];
+        new_body.push([
+            wrap(body[0][0] + dx, config.width),
+            wrap(body[0][1] + dy, config.height),
+        ]);
+        for (i = 1; i < 20; i++) {
+            new_body.push([
+                wrap(body[i-1][0], config.width),
+                wrap(body[i-1][1], config.width),
+            ]);
+        }
+        return new_body;
     }
 
     componentDidMount() {
         ReactDOM.findDOMNode(this.refs.playArea).focus();
         setInterval(() => {
             this.setState(function(state, props) {
-                var new_body = [];
-                var dx, dy, i;
-                dx = state.direction[0];
-                dy = state.direction[1];
-                new_body.push([
-                    wrap(state.body[0][0] + dx, config.width),
-                    wrap(state.body[0][1] + dy, config.height),
-                ]);
-                for (i = 1; i < this.state.len; i++) {
-                    new_body.push([
-                        wrap(state.body[i-1][0], config.width),
-                        wrap(state.body[i-1][1], config.width),
-                    ]);
-                }
+                var p0_direction = this.state.player_states[0][0];
+                var p1_direction = this.state.player_states[1][0];
+                var p0_body = this.getNewBody(this.state.player_states[0]);
+                var p1_body = this.getNewBody(this.state.player_states[1]);
+
+                p0_body.unshift(p0_direction);
+                p1_body.unshift(p1_direction);
+
                 return {
-                    body: new_body
+                    player_states: [p0_body, p1_body]
                 };
             });
 
@@ -103,26 +137,48 @@ class Arena extends React.Component {
 
 
     changeThing(e) {
+
+        var player_index = null;
+        if (this.players[0].keys.indexOf(e.keyCode) !== -1) {
+            player_index = 0;
+        }
+        if (this.players[1].keys.indexOf(e.keyCode) !== -1) {
+            player_index = 1;
+        }
+        if (player_index == null) {
+            return;
+        }
+
+        var u, d, l, r;
+        [u, d, l, r] = this.players[player_index].keys;
+
         var direction;
-        console.log('press ' + e.keyCode);
         switch (e.keyCode) {
-            case 38: // up
+            case u:
                 direction = [0, -1];
                 break;
-            case 40: // down
+            case d:
                 direction = [0, 1];
                 break;
-            case 37: // left
+            case l:
                 direction = [-1, 0];
                 break;
-            case 39: // right
+            case r:
                 direction = [1, 0];
                 break;
             default:
                 return;
         }
+        var p0 = this.state.player_states[0].slice();
+        var p1 = this.state.player_states[1].slice();
+        if (player_index === 0) {
+            p0[0] = direction;
+        }
+        if (player_index === 1) {
+            p1[0] = direction;
+        }
         this.setState({
-            direction: direction,
+            player_states: [p0, p1]
         });
     }
 
@@ -130,7 +186,8 @@ class Arena extends React.Component {
         return (
             <div tabIndex="1" ref="playArea" onKeyDown={this.changeThing}>
               <svg>
-                <Snake circles={this.state.body} />
+                <Snake circles={this.state.player_states[0].slice(1)} />
+                <Snake circles={this.state.player_states[1].slice(1)} />
               </svg>
             </div>
         );

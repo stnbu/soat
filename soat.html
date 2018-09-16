@@ -55,16 +55,16 @@ const Circle = ({ position, index }) => (
     />
 );
 
-const SVG = ({ circles }) => (
-    <svg>
+const Snake = ({ circles }) => (
+    <g>
       {
           circles.map((position, i) => <Circle key={i} position={position} index={i}/>)
       }
-    </svg>
+    </g>
 );
 
 
-class Snake extends React.Component {
+class Arena extends React.Component {
     constructor(props) {
         super(props);
         this.changeThing = this.changeThing.bind(this);
@@ -129,13 +129,15 @@ class Snake extends React.Component {
     render() {
         return (
             <div tabIndex="1" ref="playArea" onKeyDown={this.changeThing}>
-              <SVG circles={this.state.body} />
+              <svg>
+                <Snake circles={this.state.body} />
+              </svg>
             </div>
         );
     }
 }
 
-ReactDOM.render(<Snake />, document.getElementById("root"));
+ReactDOM.render(<Arena />, document.getElementById("root"));
 
 
 	</script>

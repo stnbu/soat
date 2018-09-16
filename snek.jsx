@@ -17,6 +17,7 @@ let Snake = class Snake {
     move(delta) {
         var orig_position = this.body[0].position.slice(); // where head was.
         var i;
+        // this is wonky and terrible
         var new_positions = [];
         for (i = 0; i <= 5; i++) {
             new_positions.push(this.body[i].position);

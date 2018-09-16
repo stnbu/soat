@@ -24,6 +24,12 @@
 
 // I am a jS n00b. There is lots that need refactoring. Mostly "I know I just don't know how"
 
+// HRRM?
+Array.prototype.repeat = function(n) {
+var a = [];
+for (var i=0;i<n;[i++].push.apply(a,this));
+  return a;
+}
 
 const config = {
     circle_radius: 15,
@@ -63,9 +69,9 @@ class Snake extends React.Component {
         super(props);
         this.changeThing = this.changeThing.bind(this);
         this.state = {
-            direction: [0, 1],
-            body: [[20, 0], [20, 0], [20, 0], [20, 0], [20, 0]],
-            len: 5
+            direction: [0, 0],
+            body: [[10, 10]].repeat(20),
+            len: 20
         };
     }
 
@@ -92,7 +98,7 @@ class Snake extends React.Component {
                 };
             });
 
-        }, 300);
+        }, 40);
     }
 
 
